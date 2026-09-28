@@ -1591,23 +1591,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Zone_Benzinlik
       objectReference: {fileID: 0}
-    - target: {fileID: 6433869269776202622, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
-      propertyPath: m_fontSize
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 6433869269776202622, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
-      propertyPath: m_fontColor32.rgba
-      value: 4281739806
-      objectReference: {fileID: 0}
-    - target: {fileID: 6433869269776202622, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
-      propertyPath: m_TextStyleHashCode
-      value: -1183493901
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6410178508830973801, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 7147351138749365109, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
