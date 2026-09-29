@@ -673,6 +673,18 @@ PrefabInstance:
       propertyPath: m_TextStyleHashCode
       value: -1183493901
       objectReference: {fileID: 0}
+    - target: {fileID: 4493442478965448659, guid: 2fafdbfb0b722d741924a07dddb5ee5f, type: 3}
+      propertyPath: m_text
+      value: "S\u0131tarbeks"
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493442478965448659, guid: 2fafdbfb0b722d741924a07dddb5ee5f, type: 3}
+      propertyPath: m_fontSize
+      value: 8.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 4493442478965448659, guid: 2fafdbfb0b722d741924a07dddb5ee5f, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     - target: {fileID: 4594012774838154746, guid: 2fafdbfb0b722d741924a07dddb5ee5f, type: 3}
       propertyPath: m_Name
       value: Zone_Cafe
@@ -718,10 +730,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1682738860180596538, guid: 2fafdbfb0b722d741924a07dddb5ee5f, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3756115965401621786, guid: 2fafdbfb0b722d741924a07dddb5ee5f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 5667637299463367489, guid: 2fafdbfb0b722d741924a07dddb5ee5f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 2fafdbfb0b722d741924a07dddb5ee5f, type: 3}
@@ -872,7 +888,7 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6369450391654568954, guid: 16976c7070a43aa4b88ae4e134410767, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 7230172130890138338, guid: 16976c7070a43aa4b88ae4e134410767, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 16976c7070a43aa4b88ae4e134410767, type: 3}
@@ -952,6 +968,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4200789178728841287, guid: 941088c30a119e940a71c663a83df1ac, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
+    - targetCorrespondingSourceObject: {fileID: 1662616075312959379, guid: 941088c30a119e940a71c663a83df1ac, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 941088c30a119e940a71c663a83df1ac, type: 3}
 --- !u!4 &3616764536237967485 stripped
 Transform:
@@ -1011,7 +1030,8 @@ PrefabInstance:
       value: Zone_Benzinlik
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5591567073863254811, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 7147351138749365109, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
