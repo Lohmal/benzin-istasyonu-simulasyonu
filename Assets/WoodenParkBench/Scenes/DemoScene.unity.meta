@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 99c9720ab356a0642a771bea13969a05
+guid: b42453bc59e3d4f40882aae0f9742456
 DefaultImporter:
   externalObjects: {}
   userData: 
@@ -10,5 +10,5 @@ AssetOrigin:
   productId: 348356
   packageName: "Wooden Park Bench \u2013 Game Ready 3D Model"
   packageVersion: 1.0
-  assetPath: Assets/Scenes/SampleScene.unity
+  assetPath: Assets/WoodenParkBench/Scenes/DemoScene.unity
   uploadId: 849116
