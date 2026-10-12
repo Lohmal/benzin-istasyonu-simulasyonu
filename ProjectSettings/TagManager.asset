@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Customer
   - SpeedBump
+  - Car
   layers:
   - Default
   - TransparentFX
