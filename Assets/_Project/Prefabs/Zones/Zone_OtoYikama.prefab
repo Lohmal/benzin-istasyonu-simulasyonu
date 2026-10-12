@@ -570,7 +570,6 @@ GameObject:
   m_Component:
   - component: {fileID: 805702206157874097}
   - component: {fileID: 6148075066800723078}
-  - component: {fileID: 3739765144119937958}
   m_Layer: 0
   m_Name: Sag_Donus_Merkezi
   m_TagString: Untagged
@@ -608,20 +607,6 @@ Transform:
   m_Father: {fileID: 8941547701175789394}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6148075066800723078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1451242444689400022}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 917ef457ab3559744aecacdc305719db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FircaDondur
-  donusHizi: 120
-  donuyor: 0
---- !u!114 &3739765144119937958
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1535,7 +1520,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1201421484439645729}
   - component: {fileID: 7765699039021777182}
-  - component: {fileID: 7873202572307085333}
   m_Layer: 0
   m_Name: Sol_Donus_Merkezi
   m_TagString: Untagged
@@ -1585,20 +1569,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FircaDondur
   donusHizi: -120
-  donuyor: 0
---- !u!114 &7873202572307085333
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3249461372229172650}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 917ef457ab3559744aecacdc305719db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FircaDondur
-  donusHizi: 120
   donuyor: 0
 --- !u!1 &3255829298636815698
 GameObject:
