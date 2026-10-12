@@ -32,9 +32,21 @@ namespace BenzinIstasyonu
         MaterialPropertyBlock propertyBlock;
         Color normalColor;
         bool wasBlinking;
+        bool highlighted;
+        Color highlightColor;
 
         /// <summary>Şu an kasanın önünde müşteri var mı?</summary>
         public bool HasCustomer => customersInside.Count > 0;
+
+        /// <summary>
+        /// Açıkken alan yanıp sönmek yerine verilen renkte durur
+        /// (örneğin oyuncu kasanın arkasındayken sarı).
+        /// </summary>
+        public void SetHighlight(bool on, Color color)
+        {
+            highlighted = on;
+            highlightColor = color;
+        }
 
         void Awake()
         {
@@ -59,6 +71,13 @@ namespace BenzinIstasyonu
             // Yok edilen, kapatılan ya da alanın dışına ışınlanan müşterileri listeden çıkar.
             customersInside.RemoveWhere(c => c == null || !c.enabled || !c.gameObject.activeInHierarchy
                                              || !zone.bounds.Intersects(c.bounds));
+
+            if (highlighted)
+            {
+                SetColor(highlightColor);
+                wasBlinking = true;   // vurgu kalkınca normal renge dönülsün
+                return;
+            }
 
             if (!HasCustomer)
             {
