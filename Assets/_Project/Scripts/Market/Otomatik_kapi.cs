@@ -36,15 +36,22 @@ public class OtomatikKapi : MonoBehaviour
         sagKapi.localPosition = Vector3.MoveTowards(sagKapi.localPosition, sagHedef, adim);
     }
 
+    // Player ya da market müşterisi mi?
+    bool GecerliMi(Collider other)
+    {
+        return other.CompareTag(oyuncuTag)
+            || other.GetComponentInParent<Market.MarketCustomerHareket>() != null;
+    }
+
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(oyuncuTag))
+        if (GecerliMi(other))
             icerideKisiSayisi++;
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag(oyuncuTag))
+        if (GecerliMi(other))
             icerideKisiSayisi = Mathf.Max(0, icerideKisiSayisi - 1);
     }
 }
