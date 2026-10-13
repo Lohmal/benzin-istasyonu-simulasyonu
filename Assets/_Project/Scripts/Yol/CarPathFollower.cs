@@ -31,12 +31,22 @@ namespace BenzinIstasyonu
         [Tooltip("Dönüş hızı (derece/saniye)")]
         [SerializeField] float turnSpeed = 180f;
 
+        // --- YENİ EKLENEN KISIM: Tümsek Ayarları ---
+        [Tooltip("Tümsek alanına (SpeedBump) girildiğinde düşülecek hız")]
+        [SerializeField] float speedBumpSpeed = 3f;
+
         int currentIndex;
         float waitTimer;
+
+        // Arabanın o anki aktif hızı
+        float currentActiveSpeed;
 
         void Start()
         {
             currentIndex = Mathf.Clamp(startIndex, 0, waypoints.Length - 1);
+
+            // Başlangıçta aktif hızı normal hıza eşitliyoruz
+            currentActiveSpeed = speed;
 
             // Fizik motoru arabayı itip düşürmesin; hareketi bu script yapıyor.
             if (TryGetComponent(out Rigidbody body)) body.isKinematic = true;
@@ -67,12 +77,33 @@ namespace BenzinIstasyonu
                 speedFactor = Mathf.Lerp(1f, 0.3f, angle / 90f);
             }
 
-            transform.position = Vector3.MoveTowards(transform.position, target, speed * speedFactor * Time.deltaTime);
+            // --- DEĞİŞEN KISIM: 'speed' yerine 'currentActiveSpeed' kullanıyoruz ---
+            transform.position = Vector3.MoveTowards(transform.position, target, currentActiveSpeed * speedFactor * Time.deltaTime);
 
             if ((transform.position - target).sqrMagnitude < 0.0025f)
             {
                 waitTimer = waypoint.waitTime;
                 currentIndex = (currentIndex + 1) % waypoints.Length;
+            }
+        }
+
+        // --- YENİ EKLENEN KISIM: Tetikleyici Kontrolleri ---
+
+        // Görünmez Trigger alanına girdiğimizde yavaşlat
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.CompareTag("SpeedBump"))
+            {
+                currentActiveSpeed = speedBumpSpeed;
+            }
+        }
+
+        // Görünmez Trigger alanından çıktığımızda hızı eski haline getir
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.CompareTag("SpeedBump"))
+            {
+                currentActiveSpeed = speed;
             }
         }
 
