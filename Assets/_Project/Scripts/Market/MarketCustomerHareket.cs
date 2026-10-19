@@ -48,6 +48,7 @@ namespace Market
         Collider body;
 
         public bool IsWaiting => durum == Durum.Kasada;
+        public OdemeAlani Kasa => odemeAlani;
 
         void Awake()
         {
