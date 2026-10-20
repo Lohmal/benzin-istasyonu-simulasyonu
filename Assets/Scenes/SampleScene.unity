@@ -4340,8 +4340,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9131419213568124742, guid: 2fafdbfb0b722d741924a07dddb5ee5f, type: 3}
       propertyPath: m_text
-      value: "<b>MEN\xDC</b>\n<size=70%>Kahve  .......  300\n\xC7ay  ...........
-        150\nPasta  ........  450</size>"
+      value: "<b>MEN\xDC</b>\n<size=70%>Kahve  .......  300\n\xC7ay  ........... 150\nPasta
+        \ ........  450</size>"
       objectReference: {fileID: 0}
     - target: {fileID: 9131419213568124742, guid: 2fafdbfb0b722d741924a07dddb5ee5f, type: 3}
       propertyPath: m_fontSize
@@ -4386,6 +4386,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 636715836}
     m_Modifications:
+    - target: {fileID: 3741911223291538546, guid: f537929ef90b00943a67063ffd1fb657, type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 838454625}
+    - target: {fileID: 5485842531165586621, guid: f537929ef90b00943a67063ffd1fb657, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5485842531165586621, guid: f537929ef90b00943a67063ffd1fb657, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5485842531165586621, guid: f537929ef90b00943a67063ffd1fb657, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5526754788629185369, guid: f537929ef90b00943a67063ffd1fb657, type: 3}
       propertyPath: m_LocalPosition.x
       value: 27
@@ -4967,7 +4983,7 @@ PrefabInstance:
       value: -5.13
       objectReference: {fileID: 0}
     - target: {fileID: 7283411337540998007, guid: 16976c7070a43aa4b88ae4e134410767, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
+      propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: -2143362565013843563, guid: 039747fbc6951924bbc58a1f0db6d09a, type: 3}
     - target: {fileID: 7610082971366495608, guid: 16976c7070a43aa4b88ae4e134410767, type: 3}
