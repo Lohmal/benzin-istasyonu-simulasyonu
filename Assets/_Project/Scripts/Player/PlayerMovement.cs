@@ -38,6 +38,15 @@ namespace BenzinIstasyonu
         float coyoteTimer;      // YENİ
         float jumpBufferTimer;  // YENİ
 
+        /// <summary>
+        /// Başka bir scriptin (ör. ClickToMove) verdiği yürüme yönü.
+        /// Klavye / gamepad kullanılırken yok sayılır.
+        /// </summary>
+        public Vector3 AutoMove { get; set; }
+
+        /// <summary>Bu karede klavye ya da gamepad ile yön verildi mi?</summary>
+        public bool HasDirectInput { get; private set; }
+
         void Awake()
         {
             controller = GetComponent<CharacterController>();
@@ -47,7 +56,8 @@ namespace BenzinIstasyonu
         void Update()
         {
             Vector2 input = ReadInput();
-            Vector3 move = ToWorldDirection(input);
+            HasDirectInput = input.sqrMagnitude > 0.01f;
+            Vector3 move = HasDirectInput ? ToWorldDirection(input) : AutoMove;
 
             if (move.sqrMagnitude > 0.001f)
             {

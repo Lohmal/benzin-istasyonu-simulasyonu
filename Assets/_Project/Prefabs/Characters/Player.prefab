@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5023836487799766896}
   - component: {fileID: 3756661713043089784}
   - component: {fileID: 6339250789733931307}
+  - component: {fileID: 8959488303443984620}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -76,6 +77,9 @@ MonoBehaviour:
   moveSpeed: 6
   turnSpeed: 720
   gravity: -20
+  jumpHeight: 1.5
+  coyoteTime: 0.1
+  jumpBufferTime: 0.1
 --- !u!114 &6339250789733931307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,6 +93,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BoxCarrier
   carryPoint: {fileID: 2577013720222948545}
+  putDownDistance: 1.1
+--- !u!114 &8959488303443984620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 907869521125310789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b1e0a982602b7c4181bff1fedd0e7d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BenzinIstasyonu.ClickToMove
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  stopDistance: 0.15
+  markerPrefab: {fileID: 1000908424693164591, guid: 9c2e97edc81d8d84291af88ad79cad3f, type: 3}
+  markerPulseSpeed: 6
 --- !u!1 &7129478161338286558
 GameObject:
   m_ObjectHideFlags: 0
