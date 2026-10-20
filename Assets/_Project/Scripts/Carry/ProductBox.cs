@@ -46,4 +46,20 @@ public class ProductBox : MonoBehaviour
 
         canPickUpAt = Time.time + 0.5f;
     }
+
+    // G ile bırakınca fırlatmıyorum, verilen yere koyuyorum
+    public void PutDown(Vector3 position, Quaternion rotation)
+    {
+        transform.SetParent(null);
+        transform.position = position;
+        transform.rotation = rotation;
+
+        box.enabled = true;
+        range.enabled = true;
+        rb.isKinematic = false;
+        rb.linearVelocity = Vector3.zero;     // önceden kalan hız varsa sıfırla
+        rb.angularVelocity = Vector3.zero;
+
+        canPickUpAt = Time.time + 0.5f;
+    }
 }
