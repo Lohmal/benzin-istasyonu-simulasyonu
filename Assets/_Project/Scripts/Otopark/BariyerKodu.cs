@@ -13,17 +13,12 @@ public class BariyerKodu : MonoBehaviour
     private bool acilsinMi = false;
     private float sayaç = 0f;
 
+    private int iceridekiObjeSayisi = 0;
+
     void Update()
     {
-        // Zamanı say
-        sayaç += Time.deltaTime;
-
-        // 5 saniye dolduğunda durumu tersine çevir
-        if (sayaç >= 5f)
-        {
-            acilsinMi = !acilsinMi; // Açıksa kapatır, kapalıysa açar
-            sayaç = 0f;             // Sayacı sıfırla
-        }
+        // Pivot objesi atanmadıysa hata vermesini önle
+        if (pivotObjesi == null) return;
 
         // Hedef açıya yumuşakça dön
         Vector3 hedefAci = acilsinMi ? acikAci : kapaliAci;
@@ -32,5 +27,29 @@ public class BariyerKodu : MonoBehaviour
             Quaternion.Euler(hedefAci),
             Time.deltaTime * acilmaHizi
         );
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("Bariyere temas eden: " + other.name + " | Etiketi: " + other.tag);
+
+        if (other.CompareTag("Player") || other.CompareTag("Car"))
+        {
+            iceridekiObjeSayisi++;
+            acilsinMi = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player") || other.CompareTag("Car"))
+        {
+            iceridekiObjeSayisi--;
+            if (iceridekiObjeSayisi <= 0)
+            {
+                iceridekiObjeSayisi = 0;
+                acilsinMi = false;
+            }
+        }
     }
 }
