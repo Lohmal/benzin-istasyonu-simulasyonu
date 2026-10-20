@@ -3015,7 +3015,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8788011678472866505, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
   m_PrefabInstance: {fileID: 4144426761899372331}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1345885461
+--- !u!114 &1345885466
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3024,10 +3024,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1345885456}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4983051c2702ea749874d1fdd3e4cb5c, type: 3}
+  m_Script: {fileID: 11500000, guid: efbde30ca21fac642b877327394256c6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FuelAreaCarTrigger
-  myCoin: {fileID: 1805408446}
+  m_EditorClassIdentifier: Assembly-CSharp::BenzinIstasyonu.FuelStation
+  coinPrefab: {fileID: 0}
+  coinDropPoint: {fileID: 1805408452}
+  interactionDistance: 4
+  serveDuration: 3
 --- !u!1001 &1348188279
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3669,23 +3672,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 2.5
+  m_Radius: 2.8
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1805408449
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1805408446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c894ab6876585d4ab64932716f578eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CoinPlayerTrigger
-  message: "Coin al\u0131nd\u0131!"
-  vehicle: {fileID: 672819607}
-  value: 10
 --- !u!114 &1805408450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3713,6 +3701,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BobberCoin
   bobHeight: 0.25
   bobSpeed: 2
+--- !u!4 &1805408452 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1740427400093598945, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
+  m_PrefabInstance: {fileID: 4144426761899372331}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1805408453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1805408446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f0f98f1069a66247be53adefe3d245c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BenzinIstasyonu.CoinPickup
+  value: 10
 --- !u!1 &1859235128
 GameObject:
   m_ObjectHideFlags: 0
@@ -4293,6 +4299,10 @@ PrefabInstance:
     - target: {fileID: 4594012774838154746, guid: 2fafdbfb0b722d741924a07dddb5ee5f, type: 3}
       propertyPath: m_Name
       value: Zone_Cafe
+      objectReference: {fileID: 0}
+    - target: {fileID: 6076750253725966643, guid: 2fafdbfb0b722d741924a07dddb5ee5f, type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
       objectReference: {fileID: 0}
     - target: {fileID: 6076750253725966643, guid: 2fafdbfb0b722d741924a07dddb5ee5f, type: 3}
       propertyPath: m_TextStyleHashCode
@@ -5324,6 +5334,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3698865609333144294, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
+      propertyPath: m_Size.x
+      value: 1.1412922
+      objectReference: {fileID: 0}
+    - target: {fileID: 3698865609333144294, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
       propertyPath: m_Size.y
       value: 0
       objectReference: {fileID: 0}
@@ -5333,7 +5347,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3698865609333144294, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
       propertyPath: m_Center.x
-      value: -1.6754989e-16
+      value: -0.030450404
       objectReference: {fileID: 0}
     - target: {fileID: 3698865609333144294, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
       propertyPath: m_Center.y
@@ -5391,6 +5405,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: -3
       objectReference: {fileID: 0}
+    - target: {fileID: 8388135387409873785, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 5591567073863254811, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
@@ -5404,13 +5422,10 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 8788011678472866505, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1345885461}
+      addedObject: {fileID: 1345885466}
     - targetCorrespondingSourceObject: {fileID: 7147351138749365109, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 3266103513575685434, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1805408449}
     - targetCorrespondingSourceObject: {fileID: 3266103513575685434, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1805408448}
@@ -5420,6 +5435,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3266103513575685434, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1805408450}
+    - targetCorrespondingSourceObject: {fileID: 3266103513575685434, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1805408453}
   m_SourcePrefab: {fileID: 100100000, guid: 8cc53c2f8e318834088892ab8d82040e, type: 3}
 --- !u!4 &4144426761899372332 stripped
 Transform:
