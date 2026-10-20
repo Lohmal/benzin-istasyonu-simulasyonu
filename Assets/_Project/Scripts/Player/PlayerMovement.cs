@@ -6,6 +6,7 @@ namespace BenzinIstasyonu
     /// <summary>
     /// Oyuncuyu WASD / ok tuşları / gamepad sol çubuğu ile yürütür.
     /// Hareket kameraya göre yapılır: W her zaman ekranda "yukarı" demektir.
+    /// Space / gamepad güney tuşu (A / Çarpı) ile zıplar.
     /// </summary>
     [RequireComponent(typeof(CharacterController))]
     public class PlayerMovement : MonoBehaviour
@@ -19,9 +20,32 @@ namespace BenzinIstasyonu
         [Tooltip("Yerçekimi (negatif olmalı)")]
         [SerializeField] float gravity = -20f;
 
+        // YENİ
+        [Tooltip("Zıplama yüksekliği (metre)")]
+        [SerializeField] float jumpHeight = 1.5f;
+
+        // YENİ
+        [Tooltip("Yerden ayrıldıktan sonra hâlâ zıplanabilen kısa süre (saniye). Kenarlarda daha rahat his verir.")]
+        [SerializeField] float coyoteTime = 0.1f;
+
+        // YENİ
+        [Tooltip("Yere inmeden hemen önce basılan zıplama tuşunun hatırlanma süresi (saniye)")]
+        [SerializeField] float jumpBufferTime = 0.1f;
+
         CharacterController controller;
         Transform cameraTransform;
         float verticalVelocity;
+        float coyoteTimer;      // YENİ
+        float jumpBufferTimer;  // YENİ
+
+        /// <summary>
+        /// Başka bir scriptin (ör. ClickToMove) verdiği yürüme yönü.
+        /// Klavye / gamepad kullanılırken yok sayılır.
+        /// </summary>
+        public Vector3 AutoMove { get; set; }
+
+        /// <summary>Bu karede klavye ya da gamepad ile yön verildi mi?</summary>
+        public bool HasDirectInput { get; private set; }
 
         void Awake()
         {
@@ -32,7 +56,8 @@ namespace BenzinIstasyonu
         void Update()
         {
             Vector2 input = ReadInput();
-            Vector3 move = ToWorldDirection(input);
+            HasDirectInput = input.sqrMagnitude > 0.01f;
+            Vector3 move = HasDirectInput ? ToWorldDirection(input) : AutoMove;
 
             if (move.sqrMagnitude > 0.001f)
             {
@@ -40,12 +65,40 @@ namespace BenzinIstasyonu
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, turnSpeed * Time.deltaTime);
             }
 
-            // Yerdeyken aşağı hızı sıfırlanır, havadayken yerçekimi birikir.
-            if (controller.isGrounded && verticalVelocity < 0f) verticalVelocity = -2f;
+            bool grounded = controller.isGrounded;
+
+            // Yerdeyken aşağı hızı sıfırlanır.
+            if (grounded && verticalVelocity < 0f) verticalVelocity = -2f;
+
+            // YENİ: zamanlayıcılar
+            coyoteTimer = grounded ? coyoteTime : coyoteTimer - Time.deltaTime;
+            jumpBufferTimer = JumpPressedThisFrame() ? jumpBufferTime : jumpBufferTimer - Time.deltaTime;
+
+            // YENİ: zıplama
+            if (jumpBufferTimer > 0f && coyoteTimer > 0f)
+            {
+                verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                jumpBufferTimer = 0f;
+                coyoteTimer = 0f;
+            }
+
+            // Havadayken yerçekimi birikir.
             verticalVelocity += gravity * Time.deltaTime;
 
             Vector3 velocity = move * moveSpeed + Vector3.up * verticalVelocity;
             controller.Move(velocity * Time.deltaTime);
+        }
+
+        // YENİ
+        static bool JumpPressedThisFrame()
+        {
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard != null && keyboard.spaceKey.wasPressedThisFrame) return true;
+
+            Gamepad gamepad = Gamepad.current;
+            if (gamepad != null && gamepad.buttonSouth.wasPressedThisFrame) return true;
+
+            return false;
         }
 
         // Ekrandaki yönü (yukarı/sağ) dünyadaki yöne çevirir.
