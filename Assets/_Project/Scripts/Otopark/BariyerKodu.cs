@@ -11,8 +11,8 @@ public class BariyerKodu : MonoBehaviour
     public float acilmaHizi = 3f;
 
     private bool acilsinMi = false;
-
     private int iceridekiObjeSayisi = 0;
+
 
     void Update()
     {

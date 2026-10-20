@@ -8,7 +8,6 @@ TagManager:
   - SpeedBump
   - Car
   - Vehicle
-  - Arac
   layers:
   - Default
   - TransparentFX
