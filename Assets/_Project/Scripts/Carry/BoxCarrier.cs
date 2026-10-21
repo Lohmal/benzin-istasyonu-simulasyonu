@@ -75,6 +75,15 @@ public class BoxCarrier : MonoBehaviour
         ProductBox box = other.GetComponent<ProductBox>();
         if (box != null && box == nearbyBox) nearbyBox = null;
     }
+        
+        // ipucu yazıları. elim doluysa sol altta G, boşsa kutunun üstünde E
+    void OnGUI()
+    {
+        if (IsCarrying())
+            InteractHint.DrawCorner("[G] Bırak");
+        else if (nearbyBox != null && nearbyBox.CanBePickedUp())
+            InteractHint.Draw(nearbyBox.transform.position + Vector3.up * 0.6f, "[E] Al");
+    }
 
     // G ile bırakma. kutuyu önüme, biraz yukarıdan koyuyorum, kendi düşüp yere oturuyor
     public void PutDownBox()
