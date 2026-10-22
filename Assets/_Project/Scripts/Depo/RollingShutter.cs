@@ -1,46 +1,84 @@
 using UnityEngine;
 
-// Depo kepengini otomatik olarak açıp kapatır.
-// Visual objesine takılır; kepengin üst kenarı sabit kalır, yüksekliği değişir.
+// depo kepengi. eskiden kendi kendine açılıp kapanıyordu, artık düğmeyle çalışıyor
+// Visual objesine takılı, üst kenar sabit kalıyor, sadece yüksekliği değişiyor
 public class RollingShutter : MonoBehaviour
 {
-    [SerializeField] private float openHeight = 0.1f;  // açıkken kalan yükseklik (metre)
-    [SerializeField] private float speed = 1f;         // toplanma/inme hızı (metre/saniye)
-    [SerializeField] private float waitTime = 2f;      // her uçta bekleme süresi (saniye)
+    [SerializeField] private float openHeight = 0.1f;   // açıkken yukarıda kalan kısım
+    [SerializeField] private float speed = 1.5f;        // inip kalkma hızı (metre/saniye)
+    [SerializeField] private bool startOpen = false;    // oyun başında açık mı olsun
 
-    private float closedHeight;   // kapalıyken tam yükseklik
-    private float topY;           // kepengin sabit kalan üst kenarı
-    private bool opening = true;  // şu an açılıyor mu?
-    private float waitTimer;      // kalan bekleme süresi
+    [SerializeField] private AudioClip moveSound;       // hareket ederken dönen tıkırtı
+    [SerializeField] private AudioClip stopSound;       // yerine oturunca
+
+    private float closedHeight;   // kapalıyken tam boy
+    private float topY;           // üst kenarın yeri, bu hiç değişmiyor
+    private bool isOpen;
+    private bool moving;          // dururken ses kesilsin diye hareket ediyor mu bakıyorum
+    private AudioSource audioSource;
 
     void Start()
     {
-        closedHeight = transform.localScale.y;                  // başlangıçtaki tam yükseklik (2.5)
-        topY = transform.localPosition.y + closedHeight / 2f;   // üst kenarın konumunu hatırla
+        audioSource = GetComponent<AudioSource>();
+
+        closedHeight = transform.localScale.y;
+        topY = transform.localPosition.y + closedHeight / 2f;
+
+        isOpen = startOpen;
+        if (isOpen) SetHeight(openHeight);   // açık başlayacaksa direkt açık koy, animasyon olmasın
     }
 
     void Update()
     {
-        if (waitTimer > 0f)
+        float target = isOpen ? openHeight : closedHeight;
+        if (transform.localScale.y == target) return;   // zaten yerindeyse bir şey yapma
+
+        float height = Mathf.MoveTowards(transform.localScale.y, target, speed * Time.deltaTime);
+        SetHeight(height);
+
+        // tam yerine vardığı kare
+        if (height == target && moving)
         {
-            waitTimer -= Time.deltaTime;   // bekleme süresini azalt
-            return;                        // beklerken Update'in geri kalanını atla
+            moving = false;
+            if (audioSource != null) audioSource.Stop();   // tıkırtıyı kes
+            PlaySound(stopSound);                           // yerine oturma sesi
         }
+    }
 
-        float target = opening ? openHeight : closedHeight;   // açılıyorsa hedef 0.1, kapanıyorsa 2.5
+    // düğme bunu çağırıyor. kepenk hareket ederken basılırsa da geri dönüyor
+    public void Toggle()
+    {
+        isOpen = !isOpen;
+        moving = true;
 
-        Vector3 scale = transform.localScale;                                    // 1. kopyayı al
-        scale.y = Mathf.MoveTowards(scale.y, target, speed * Time.deltaTime);    // 2. kopyayı değiştir
-        transform.localScale = scale;                                            // 3. kopyayı geri ver
+        // hareket sesi kepenk durana kadar dönsün
+        if (moveSound != null && audioSource != null)
+        {
+            audioSource.clip = moveSound;
+            audioSource.loop = true;
+            if (!audioSource.isPlaying) audioSource.Play();
+        }
+    }
+
+    public bool IsOpen()
+    {
+        return isOpen;
+    }
+
+    // boyu değiştirip üst kenarı yerinde tutuyor
+    private void SetHeight(float height)
+    {
+        Vector3 scale = transform.localScale;
+        scale.y = height;
+        transform.localScale = scale;
 
         Vector3 pos = transform.localPosition;
-        pos.y = topY - scale.y / 2f;       // üst kenar sabit kalsın diye merkezi kaydır
+        pos.y = topY - height / 2f;
         transform.localPosition = pos;
+    }
 
-        if (scale.y == target)
-        {
-            opening = !opening;            // uca varınca yön değiştir
-            waitTimer = waitTime;          // ve biraz bekle
-        }
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null && audioSource != null) audioSource.PlayOneShot(clip);
     }
 }
