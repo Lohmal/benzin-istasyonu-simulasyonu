@@ -1,9 +1,9 @@
+
 using UnityEngine;
 
 public class BoomGateController : MonoBehaviour
 {
     public Transform barrier;
-
     public float openAngle = -90f;
     public float speed = 2f;
 
@@ -13,17 +13,27 @@ public class BoomGateController : MonoBehaviour
 
     void Start()
     {
+        if (barrier == null)
+        {
+            Debug.LogError("Barrier atanmamis!");
+            enabled = false;
+            return;
+        }
+
         closedRotation = barrier.localRotation;
-        openRotation = Quaternion.Euler(
-            barrier.localEulerAngles.x,
-            barrier.localEulerAngles.y,
-            openAngle
-        );
+
+        Vector3 angles = barrier.localEulerAngles;
+        angles.z = openAngle;
+        openRotation = Quaternion.Euler(angles);
+
+        isOpen = false;
+        barrier.localRotation = closedRotation;
     }
 
     void Update()
     {
-        Quaternion targetRotation = isOpen ? openRotation : closedRotation;
+        Quaternion targetRotation =
+            isOpen ? openRotation : closedRotation;
 
         barrier.localRotation = Quaternion.Lerp(
             barrier.localRotation,
