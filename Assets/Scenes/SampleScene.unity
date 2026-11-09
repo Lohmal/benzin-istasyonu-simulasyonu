@@ -1155,7 +1155,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7720726507797323357, guid: e9be6b9d71ce20345b55b654f6eca5d9, type: 3}
       propertyPath: m_TagString
-      value: Vehicle
+      value: Car
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1223,6 +1223,10 @@ PrefabInstance:
     - target: {fileID: 642287924342879162, guid: 79d0ca8b77e301442afdb49f102e8aed, type: 3}
       propertyPath: m_Name
       value: Prometheus
+      objectReference: {fileID: 0}
+    - target: {fileID: 642287924342879162, guid: 79d0ca8b77e301442afdb49f102e8aed, type: 3}
+      propertyPath: m_TagString
+      value: Car
       objectReference: {fileID: 0}
     - target: {fileID: 5135156708204615449, guid: 79d0ca8b77e301442afdb49f102e8aed, type: 3}
       propertyPath: m_UseGravity
@@ -1590,6 +1594,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 907869521125310789, guid: 210ba7265c8c21f46b3343bd81525512, type: 3}
       insertIndex: -1
       addedObject: {fileID: 838454628}
+    - targetCorrespondingSourceObject: {fileID: 907869521125310789, guid: 210ba7265c8c21f46b3343bd81525512, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 838454633}
+    - targetCorrespondingSourceObject: {fileID: 907869521125310789, guid: 210ba7265c8c21f46b3343bd81525512, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 838454634}
   m_SourcePrefab: {fileID: 100100000, guid: 210ba7265c8c21f46b3343bd81525512, type: 3}
 --- !u!4 &547137889 stripped
 Transform:
@@ -2422,6 +2432,44 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &838454633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838454625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfb1f1eaf1041dd499af07f483e2038e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarHitCameraBump
+  cameraTransform: {fileID: 0}
+  carTag: Car
+  duration: 0.2
+  magnitude: 0.18
+  cooldown: 0.1
+--- !u!65 &838454634
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838454625}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.75, z: 1}
+  m_Center: {x: 0, y: 0.8690643, z: 0}
 --- !u!1 &846716565
 GameObject:
   m_ObjectHideFlags: 0
@@ -4506,6 +4554,10 @@ PrefabInstance:
     - target: {fileID: 7720726507797323357, guid: e9be6b9d71ce20345b55b654f6eca5d9, type: 3}
       propertyPath: m_Name
       value: BlueCar
+      objectReference: {fileID: 0}
+    - target: {fileID: 7720726507797323357, guid: e9be6b9d71ce20345b55b654f6eca5d9, type: 3}
+      propertyPath: m_TagString
+      value: Car
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
