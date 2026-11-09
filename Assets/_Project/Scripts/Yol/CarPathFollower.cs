@@ -3,9 +3,8 @@ using UnityEngine;
 namespace BenzinIstasyonu
 {
     /// <summary>
-    /// Arabayı bir nokta (waypoint) listesi boyunca döngü hâlinde sürer.
-    /// Son noktadan sonra ilk noktaya döner; istenen noktalarda bir süre bekler.
-    /// Örnek: yolun sonunda dur, karşı şeride geç, geri dön, yolun başında dur...
+    /// Arabayı verilen noktalara doğru dümdüz sürer.
+    /// Tümsekte (SpeedBump) yavaşlar ve son noktaya ulaştığında yok olur (Sink).
     /// </summary>
     public class CarPathFollower : MonoBehaviour
     {
@@ -19,7 +18,7 @@ namespace BenzinIstasyonu
             public float waitTime;
         }
 
-        [Tooltip("Arabanın sırayla gideceği noktalar. Sondan sonra başa döner.")]
+        [Tooltip("Arabanın sırayla gideceği noktalar.")]
         [SerializeField] Waypoint[] waypoints;
 
         [Tooltip("Oyun başlarken hangi noktaya doğru gideceği (0'dan başlar)")]
@@ -28,10 +27,7 @@ namespace BenzinIstasyonu
         [Tooltip("Düz yoldaki hız (metre/saniye)")]
         [SerializeField] float speed = 10f;
 
-        [Tooltip("Dönüş hızı (derece/saniye)")]
-        [SerializeField] float turnSpeed = 180f;
-
-        // --- YENİ EKLENEN KISIM: Tümsek Ayarları ---
+        // --- Tümsek Ayarları ---
         [Tooltip("Tümsek alanına (SpeedBump) girildiğinde düşülecek hız")]
         [SerializeField] float speedBumpSpeed = 3f;
 
@@ -41,9 +37,23 @@ namespace BenzinIstasyonu
         // Arabanın o anki aktif hızı
         float currentActiveSpeed;
 
+        // Spawner'dan yolu alma fonksiyonu
+        public void SetWaypoints(Transform[] points)
+        {
+            waypoints = new Waypoint[points.Length];
+            for (int i = 0; i < points.Length; i++)
+            {
+                waypoints[i] = new Waypoint { point = points[i], waitTime = 0f };
+            }
+            currentIndex = 0;
+        }
+
         void Start()
         {
-            currentIndex = Mathf.Clamp(startIndex, 0, waypoints.Length - 1);
+            if (waypoints != null && waypoints.Length > 0)
+            {
+                currentIndex = Mathf.Clamp(startIndex, 0, waypoints.Length - 1);
+            }
 
             // Başlangıçta aktif hızı normal hıza eşitliyoruz
             currentActiveSpeed = speed;
@@ -63,33 +73,37 @@ namespace BenzinIstasyonu
             }
 
             Waypoint waypoint = waypoints[currentIndex];
+            if (waypoint.point == null) return;
+
             Vector3 target = waypoint.point.position;
             Vector3 toTarget = target - transform.position;
             toTarget.y = 0f;
 
-            // Önce gideceği yöne dön. Keskin dönüşlerde (şerit değiştirirken) yavaşla.
-            float speedFactor = 1f;
+            // Yüzünü doğrudan hedefe çevir (açısal yavaşlama olmadan)
             if (toTarget.sqrMagnitude > 0.0001f)
             {
-                Quaternion look = Quaternion.LookRotation(toTarget);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, look, turnSpeed * Time.deltaTime);
-                float angle = Quaternion.Angle(transform.rotation, look);
-                speedFactor = Mathf.Lerp(1f, 0.3f, angle / 90f);
+                transform.rotation = Quaternion.LookRotation(toTarget);
             }
 
-            // --- DEĞİŞEN KISIM: 'speed' yerine 'currentActiveSpeed' kullanıyoruz ---
-            transform.position = Vector3.MoveTowards(transform.position, target, currentActiveSpeed * speedFactor * Time.deltaTime);
+            // Aktif hızla (normal hız veya tümsek hızı) dümdüz ilerle
+            transform.position = Vector3.MoveTowards(transform.position, target, currentActiveSpeed * Time.deltaTime);
 
+            // Hedef noktaya ulaştı mı?
             if ((transform.position - target).sqrMagnitude < 0.0025f)
             {
                 waitTimer = waypoint.waitTime;
-                currentIndex = (currentIndex + 1) % waypoints.Length;
+                currentIndex++;
+
+                // Son noktaya (WP_1 veya WP_3) ulaştıysa arabayı YOK ET
+                if (currentIndex >= waypoints.Length)
+                {
+                    Destroy(gameObject);
+                }
             }
         }
 
-        // --- YENİ EKLENEN KISIM: Tetikleyici Kontrolleri ---
+        // --- Tetikleyici Kontrolleri (Tümsek Yavaşlama) ---
 
-        // Görünmez Trigger alanına girdiğimizde yavaşlat
         private void OnTriggerEnter(Collider other)
         {
             if (other.CompareTag("SpeedBump"))
@@ -98,7 +112,6 @@ namespace BenzinIstasyonu
             }
         }
 
-        // Görünmez Trigger alanından çıktığımızda hızı eski haline getir
         private void OnTriggerExit(Collider other)
         {
             if (other.CompareTag("SpeedBump"))
@@ -112,10 +125,10 @@ namespace BenzinIstasyonu
         {
             if (waypoints == null) return;
             Gizmos.color = Color.cyan;
-            for (int i = 0; i < waypoints.Length; i++)
+            for (int i = 0; i < waypoints.Length - 1; i++)
             {
                 Transform a = waypoints[i].point;
-                Transform b = waypoints[(i + 1) % waypoints.Length].point;
+                Transform b = waypoints[i + 1].point;
                 if (a == null || b == null) continue;
                 Gizmos.DrawSphere(a.position, 0.4f);
                 Gizmos.DrawLine(a.position, b.position);
