@@ -38,6 +38,12 @@ namespace BenzinIstasyonu
         // UI Görselleri İçin Doku
         private Texture2D fillTexture;
 
+        /// <summary>Alanda benzin bekleyen bir araba var mı? (Dolum başlamadıysa ve bu araba için işlem bitmediyse)</summary>
+        public bool IsCarWaiting => isCarInZone && !isFueling && !isFueled && !isFinishedForThisCar;
+
+        /// <summary>Oyuncunun 'E' ile etkileşime girebileceği mesafe.</summary>
+        public float InteractionDistance => interactionDistance;
+
         private void Start()
         {
             // Sahnedeki oyuncuyu (Player/Karakter) otomatik olarak bul
