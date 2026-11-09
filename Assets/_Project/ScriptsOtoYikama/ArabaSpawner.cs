@@ -49,6 +49,23 @@ public class ArabaSpawner : MonoBehaviour
             spawnNoktasi.rotation
         );
 
+        // Arabanin onune gorunmez guvenlik alani ekle
+        GameObject guvenlikKupu = new GameObject("OnGuvenlikTrigger");
+
+        guvenlikKupu.transform.SetParent(yeniAraba.transform, false);
+
+        guvenlikKupu.transform.localPosition = new Vector3(0f, 0.8f, 2.5f);
+        guvenlikKupu.transform.localRotation = Quaternion.identity;
+        guvenlikKupu.transform.localScale = Vector3.one;
+
+        // Gorunmez trigger alani
+        BoxCollider collider = guvenlikKupu.AddComponent<BoxCollider>();
+        collider.isTrigger = true;
+        collider.size = new Vector3(2.5f, 1.5f, 2f);
+
+        // Player algilama scripti
+        ArabaOnGuvenlik guvenlik = guvenlikKupu.AddComponent<ArabaOnGuvenlik>();
+
         // Trigger'ın arabayı tanıması için
         yeniAraba.tag = "Car";
 
@@ -79,6 +96,7 @@ public class ArabaSpawner : MonoBehaviour
         hareket.hiz = arabaHizi;
         hareket.yikamaSuresi = yikamaSuresi;
         hareket.spawner = this;
+        hareket.onGuvenlik = guvenlik;
 
         yeniArabaBekleniyor = false;
     }
