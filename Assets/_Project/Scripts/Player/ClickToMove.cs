@@ -21,6 +21,10 @@ namespace BenzinIstasyonu
         [Tooltip("Hedefe bu kadar yaklaşınca durur (metre)")]
         [SerializeField] float stopDistance = 0.15f;
 
+        [Tooltip("Oyuncunun ayağından bu kadar yüksekteki yüzeyler (benzinlik çatısı, raf üstü...) tıklamada yok sayılır, " +
+                 "ışın altındaki zemine kadar devam eder.")]
+        [SerializeField] float maxGroundHeightAbovePlayer = 1f;
+
         [Tooltip("Tıklanan yerde görünen işaretin prefab'ı (boş bırakılabilir)")]
         [SerializeField] Transform markerPrefab;
 
@@ -33,6 +37,7 @@ namespace BenzinIstasyonu
         Vector3 target;
         bool hasTarget;
         Vector3 markerScale;
+        readonly RaycastHit[] rayHits = new RaycastHit[16];
 
         // Bir yere takılırsa (duvar, tezgâh) sonsuza kadar itmesin diye.
         float stuckTimer;
@@ -85,13 +90,7 @@ namespace BenzinIstasyonu
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
 
             Ray ray = cam.ScreenPointToRay(screenPosition);
-            if (!Physics.Raycast(ray, out RaycastHit hit, 200f, groundMask, QueryTriggerInteraction.Ignore)) return;
-
-            // Müşteriye tıklamak sipariş içindir, yürümek için değil.
-            if (hit.collider.CompareTag("Customer") || hit.collider.GetComponentInParent<CafeCustomer>() != null) return;
-
-            // Sadece yere benzeyen (yukarı bakan) yüzeyler; duvarın yan yüzüne tıklamak sayılmaz.
-            if (hit.normal.y < 0.7f) return;
+            if (!TryFindGround(ray, out RaycastHit hit)) return;
 
             target = hit.point;
             hasTarget = true;
@@ -103,6 +102,39 @@ namespace BenzinIstasyonu
                 marker.position = hit.point + Vector3.up * 0.02f;
                 marker.gameObject.SetActive(true);
             }
+        }
+
+        // Işının çarptığı yüzeyleri yakından uzağa gezer ve ilk "zemin" yüzeyini bulur.
+        // Oyuncunun çok üstünde kalan yüzeyler (benzinlik çatısı gibi) ve dikey yüzeyler (duvar yüzü,
+        // tabela) atlanır; böylece ekranda görünen yere tıklanınca oraya gidilir.
+        bool TryFindGround(Ray ray, out RaycastHit ground)
+        {
+            ground = default;
+            int count = Physics.RaycastNonAlloc(ray, rayHits, 200f, groundMask, QueryTriggerInteraction.Ignore);
+            System.Array.Sort(rayHits, 0, count, HitDistanceComparer.Instance);
+
+            float maxY = transform.position.y + maxGroundHeightAbovePlayer;
+            for (int i = 0; i < count; i++)
+            {
+                RaycastHit h = rayHits[i];
+                if (h.collider.transform.IsChildOf(transform)) continue; // oyuncunun kendisi
+
+                // Müşteriye tıklamak sipariş içindir, yürümek için değil.
+                if (h.collider.CompareTag("Customer") || h.collider.GetComponentInParent<CafeCustomer>() != null) return false;
+
+                // Sadece yere benzeyen (yukarı bakan) ve oyuncunun yetişebileceği yükseklikteki yüzeyler.
+                if (h.normal.y < 0.7f || h.point.y > maxY) continue;
+
+                ground = h;
+                return true;
+            }
+            return false;
+        }
+
+        sealed class HitDistanceComparer : System.Collections.Generic.IComparer<RaycastHit>
+        {
+            public static readonly HitDistanceComparer Instance = new HitDistanceComparer();
+            public int Compare(RaycastHit a, RaycastHit b) => a.distance.CompareTo(b.distance);
         }
 
         bool IsStuck(float distance)

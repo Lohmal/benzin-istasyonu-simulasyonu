@@ -61,11 +61,12 @@ namespace BenzinIstasyonu
         static readonly int ParamsId = Shader.PropertyToID("_SeeThroughParams");
         static readonly int Params2Id = Shader.PropertyToID("_SeeThroughParams2");
 
-        // Collider başına önbellek: see-through mu, varsa özel yarıçapı (yoksa -1)
+        // Collider başına önbellek: see-through mu, varsa özel yarıçapı ve kenar yumuşaklığı (yoksa -1)
         struct OccluderInfo
         {
             public bool seeThrough;
             public float radius;
+            public float softness;
         }
 
         readonly RaycastHit[] hits = new RaycastHit[16];
@@ -74,6 +75,8 @@ namespace BenzinIstasyonu
         float amount;
         float currentRadius;
         float targetRadius;
+        float currentSoftness;
+        float targetSoftness;
 
         /// <summary>Deliğin şu anki açıklığı (0 kapalı, 1 tam açık).</summary>
         public float Amount => amount;
@@ -82,6 +85,7 @@ namespace BenzinIstasyonu
         {
             seeThroughShader = Shader.Find(ShaderName);
             currentRadius = targetRadius = radius;
+            currentSoftness = targetSoftness = softness;
             if (target == null)
             {
                 var player = GameObject.FindWithTag("Player");
@@ -103,28 +107,32 @@ namespace BenzinIstasyonu
                 return;
             }
 
-            bool occluded = IsOccluded(out float occluderRadius);
+            bool occluded = IsOccluded(out float occluderRadius, out float occluderSoftness);
             float speed = occluded ? openSpeed : closeSpeed;
             amount = Mathf.MoveTowards(amount, occluded ? 1f : 0f, speed * Time.deltaTime);
             float eased = amount * amount * (3f - 2f * amount); // smoothstep
 
-            // Kapanırken son yarıçap korunur, böylece delik büyüklüğü değişmeden kapanır
-            if (occluded) targetRadius = occluderRadius;
-            if (amount <= 0f) currentRadius = targetRadius = radius;
-            currentRadius = Mathf.Lerp(currentRadius, targetRadius, 1f - Mathf.Exp(-radiusLerpSpeed * Time.deltaTime));
+            // Kapanırken son yarıçap ve yumuşaklık korunur, böylece delik şekli değişmeden kapanır
+            if (occluded) { targetRadius = occluderRadius; targetSoftness = occluderSoftness; }
+            if (amount <= 0f) { currentRadius = targetRadius = radius; currentSoftness = targetSoftness = softness; }
+            float k = 1f - Mathf.Exp(-radiusLerpSpeed * Time.deltaTime);
+            currentRadius = Mathf.Lerp(currentRadius, targetRadius, k);
+            currentSoftness = Mathf.Lerp(currentSoftness, targetSoftness, k);
 
             Vector3 basePos = target.position;
             Vector3 center = basePos + Vector3.up * centerHeight;
             Shader.SetGlobalVector(TargetId, new Vector4(center.x, center.y, center.z, basePos.y));
-            Shader.SetGlobalVector(ParamsId, new Vector4(eased, currentRadius, softness, dither ? 1f : 0f));
+            Shader.SetGlobalVector(ParamsId, new Vector4(eased, currentRadius, currentSoftness, dither ? 1f : 0f));
             Shader.SetGlobalVector(Params2Id, new Vector4(minCutHeight, depthMargin, 0f, 0f));
         }
 
-        // Oyuncuyu see-through bir obje kapatıyor mu? Kapatıyorsa, kapatanlar arasındaki en büyük yarıçapı döndürür.
-        bool IsOccluded(out float occluderRadius)
+        // Oyuncuyu see-through bir obje kapatıyor mu? Kapatıyorsa, kapatanlar arasındaki en büyük yarıçapı
+        // ve o objenin kenar yumuşaklığını döndürür.
+        bool IsOccluded(out float occluderRadius, out float occluderSoftness)
         {
             bool occluded = false;
             occluderRadius = radius;
+            occluderSoftness = softness;
             Vector3 camPos = transform.position;
             foreach (float h in checkHeights)
             {
@@ -143,7 +151,11 @@ namespace BenzinIstasyonu
                     if (!info.seeThrough) continue;
 
                     float r = info.radius > 0f ? info.radius : radius;
-                    occluderRadius = occluded ? Mathf.Max(occluderRadius, r) : r;
+                    if (!occluded || r > occluderRadius)
+                    {
+                        occluderRadius = r;
+                        occluderSoftness = info.softness >= 0f ? info.softness : softness;
+                    }
                     occluded = true;
                 }
             }
@@ -155,7 +167,7 @@ namespace BenzinIstasyonu
         {
             if (occluderCache.TryGetValue(col, out OccluderInfo cached)) return cached;
 
-            var info = new OccluderInfo { seeThrough = false, radius = -1f };
+            var info = new OccluderInfo { seeThrough = false, radius = -1f, softness = -1f };
             Renderer rend = col.GetComponent<Renderer>();
             if (rend == null) rend = col.GetComponentInParent<Renderer>();
             if (rend != null && seeThroughShader != null)
@@ -166,7 +178,11 @@ namespace BenzinIstasyonu
                 }
             }
             var radiusOverride = col.GetComponentInParent<SeeThroughRadiusOverride>();
-            if (radiusOverride != null) info.radius = radiusOverride.Radius;
+            if (radiusOverride != null)
+            {
+                info.radius = radiusOverride.Radius;
+                info.softness = radiusOverride.Softness;
+            }
 
             occluderCache[col] = info;
             return info;

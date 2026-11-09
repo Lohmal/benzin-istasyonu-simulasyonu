@@ -84,7 +84,8 @@ namespace BenzinIstasyonu
                 Debug.Log("🚗 Araba benzinliğe geldi ve durdu.");
 
                 // Arabanın yol takip mekanizmasını pasif hale getirerek durduruyoruz
-                carFollower = other.GetComponentInParent<MonoBehaviour>();
+                carFollower = other.GetComponentInParent<CarPathFollower>();
+                if (carFollower == null) carFollower = other.GetComponentInParent<MonoBehaviour>();
                 if (carFollower != null)
                 {
                     carFollower.enabled = false;

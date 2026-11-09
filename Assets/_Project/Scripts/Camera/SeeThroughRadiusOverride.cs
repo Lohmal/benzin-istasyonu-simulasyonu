@@ -12,6 +12,13 @@ namespace BenzinIstasyonu
         [Tooltip("Bu obje kapattığında deliğin yarıçapı, ekran yüksekliğinin oranı olarak.")]
         [Range(0.02f, 0.5f)] [SerializeField] float radius = 0.22f;
 
+        [Tooltip("Kenar yumuşaklığı (0 = keskin, 1 = merkeze kadar noktalı geçiş). " +
+                 "Negatif: SeeThroughController'daki varsayılan kullanılır. Küçük değer = tamamen açık alan daha geniş.")]
+        [Range(-1f, 1f)] [SerializeField] float softness = -1f;
+
         public float Radius => radius;
+
+        /// <summary>Negatifse varsayılan kullanılır.</summary>
+        public float Softness => softness;
     }
 }
