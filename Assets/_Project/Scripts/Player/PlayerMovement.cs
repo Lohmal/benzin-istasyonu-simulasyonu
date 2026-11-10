@@ -47,6 +47,10 @@ namespace BenzinIstasyonu
         /// <summary>Bu karede klavye ya da gamepad ile yön verildi mi?</summary>
         public bool HasDirectInput { get; private set; }
 
+        // ağır koli taşırken BoxCarrier bunları düşürüyor. normalde 1, yani hareket hiç değişmiyor
+        public float SpeedMultiplier { get; set; } = 1f;
+        public float JumpMultiplier { get; set; } = 1f;
+
         void Awake()
         {
             controller = GetComponent<CharacterController>();
@@ -77,7 +81,7 @@ namespace BenzinIstasyonu
             // YENİ: zıplama
             if (jumpBufferTimer > 0f && coyoteTimer > 0f)
             {
-                verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                verticalVelocity = Mathf.Sqrt(jumpHeight * JumpMultiplier * -2f * gravity);
                 jumpBufferTimer = 0f;
                 coyoteTimer = 0f;
             }
@@ -85,7 +89,7 @@ namespace BenzinIstasyonu
             // Havadayken yerçekimi birikir.
             verticalVelocity += gravity * Time.deltaTime;
 
-            Vector3 velocity = move * moveSpeed + Vector3.up * verticalVelocity;
+            Vector3 velocity = move * moveSpeed * SpeedMultiplier + Vector3.up * verticalVelocity;
             controller.Move(velocity * Time.deltaTime);
         }
 

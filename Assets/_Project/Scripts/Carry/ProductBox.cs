@@ -3,6 +3,8 @@ using UnityEngine;
 // ürün kutusu. karakter alınca kafasına çıkıyor, düşünce yere geri dönüyor
 public class ProductBox : MonoBehaviour
 {
+    [SerializeField] private BoxType type;   // hafif mi ağır mı, veri dosyasından geliyor
+
     private Rigidbody rb;
     private Collider box;        // kutunun gövdesi
     private Collider range;      // alma alanı (sphere, trigger)
@@ -13,6 +15,25 @@ public class ProductBox : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         box = GetComponent<BoxCollider>();
         range = GetComponent<SphereCollider>();
+
+        // tip seçmeyi unuttuysam kırmızıyla söylesin
+        if (type == null) Debug.LogError(name + ": koli tipi seçilmemiş");
+    }
+
+    // taşıyan karakter bunlara bakıp yavaşlıyor. tip yoksa normal say
+    public float SpeedMultiplier()
+    {
+        return type != null ? type.SpeedMultiplier() : 1f;
+    }
+
+    public float JumpMultiplier()
+    {
+        return type != null ? type.JumpMultiplier() : 1f;
+    }
+
+    public string Label()
+    {
+        return type != null ? type.Label() : "";
     }
 
     // düşeli yarım saniye geçtiyse tekrar alınabilir

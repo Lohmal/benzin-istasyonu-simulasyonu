@@ -1,21 +1,24 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using BenzinIstasyonu;   // PlayerMovement bu namespace'in içinde
 
-// karakterin kutu taşıması. E ile alıyor, G ile bırakıyor
+// karakterin kutu taşıması. E ile alıyor, G ile bırakıyor. ağır koli karakteri yavaşlatıyor
 public class BoxCarrier : MonoBehaviour
 {
-    [SerializeField] private Transform carryPoint;  // kutunun duracağı yer, kafanın üstü
-
-    [SerializeField] private float putDownDistance = 1.1f;  // kutuyu ne kadar önüme koyayım
+    [SerializeField] private Transform carryPoint;           // kutunun duracağı yer, kafanın üstü
+    [SerializeField] private float putDownDistance = 1.1f;   // kutuyu ne kadar önüme koyayım
 
     private ProductBox carried;      // elimdeki kutu, null ise elim boş
     private ProductBox nearbyBox;    // yanımda duran kutu, E'ye basınca bu alınıyor
+    private PlayerMovement movement; // ağır kolide hızı ve zıplamayı düşürmek için
 
     private InputAction pickUpAction;
     private InputAction dropAction;
 
     void Awake()
     {
+        movement = GetComponent<PlayerMovement>();
+
         // E zaten projedeki Interact action'ında var, onu kullanıyorum
         pickUpAction = InputSystem.actions.FindAction("Interact");
 
@@ -55,6 +58,7 @@ public class BoxCarrier : MonoBehaviour
         carried = nearbyBox;
         nearbyBox = null;
         carried.PickUp(carryPoint);
+        SetWeight(carried);
     }
 
     public bool IsCarrying()
@@ -75,14 +79,20 @@ public class BoxCarrier : MonoBehaviour
         ProductBox box = other.GetComponent<ProductBox>();
         if (box != null && box == nearbyBox) nearbyBox = null;
     }
-        
-        // ipucu yazıları. elim doluysa sol altta G, boşsa kutunun üstünde E
+
+    // ipucu yazıları. elim doluysa sol altta G, boşsa kutunun üstünde E (ağırsa yanında yazıyor)
     void OnGUI()
     {
         if (IsCarrying())
+        {
             InteractHint.DrawCorner("[G] Bırak");
+        }
         else if (nearbyBox != null && nearbyBox.CanBePickedUp())
-            InteractHint.Draw(nearbyBox.transform.position + Vector3.up * 0.6f, "[E] Al");
+        {
+            string text = "[E] Al";
+            if (nearbyBox.Label() != "") text += " (" + nearbyBox.Label() + ")";
+            InteractHint.Draw(nearbyBox.transform.position + Vector3.up * 0.6f, text);
+        }
     }
 
     // G ile bırakma. kutuyu önüme, biraz yukarıdan koyuyorum, kendi düşüp yere oturuyor
@@ -95,6 +105,7 @@ public class BoxCarrier : MonoBehaviour
 
         carried.PutDown(spot, facing);
         carried = null;
+        ClearWeight();
     }
 
     // yağ gibi şeyler de bunu çağırıyor
@@ -104,6 +115,7 @@ public class BoxCarrier : MonoBehaviour
 
         carried.Drop();
         carried = null;
+        ClearWeight();
     }
 
     // raf teslim alanı bunu çağırıyor, kutuyu verip elimi boşaltıyor
@@ -111,6 +123,23 @@ public class BoxCarrier : MonoBehaviour
     {
         ProductBox box = carried;
         carried = null;
+        ClearWeight();
         return box;
+    }
+
+    // elimdeki kolinin ağırlığını karaktere yansıtıyorum
+    private void SetWeight(ProductBox box)
+    {
+        if (movement == null) return;
+        movement.SpeedMultiplier = box.SpeedMultiplier();
+        movement.JumpMultiplier = box.JumpMultiplier();
+    }
+
+    // elim boşaldı, normale dön
+    private void ClearWeight()
+    {
+        if (movement == null) return;
+        movement.SpeedMultiplier = 1f;
+        movement.JumpMultiplier = 1f;
     }
 }
