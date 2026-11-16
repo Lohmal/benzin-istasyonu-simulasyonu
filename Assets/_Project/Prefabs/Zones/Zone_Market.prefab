@@ -1110,7 +1110,8 @@ Transform:
   m_LocalPosition: {x: 0.55, y: 1.43, z: 0}
   m_LocalScale: {x: 1, y: 0.05, z: 4}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8904384006932123193}
   m_Father: {fileID: 9044275313229452335}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2279793691943434353
@@ -7529,6 +7530,60 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &8192585791017158595
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8804223604014599913}
+  - component: {fileID: 7413980117906849570}
+  - component: {fileID: 7239566123121650004}
+  m_Layer: 0
+  m_Name: SpawnPad
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8804223604014599913
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8192585791017158595}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.125, y: 3, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8904384006932123193}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &7413980117906849570
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8192585791017158595}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &7239566123121650004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8192585791017158595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00519bc8c771c034e8545fb356bcc4c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UrunSpawner
+  urunPrefab: {fileID: 3592535895996443023, guid: 590e581de2140444f9104d9621af658c, type: 3}
 --- !u!1 &8347944137593969670
 GameObject:
   m_ObjectHideFlags: 0
@@ -8089,6 +8144,38 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &8600286056279749455
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8904384006932123193}
+  m_Layer: 0
+  m_Name: ProductSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8904384006932123193
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8600286056279749455}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8804223604014599913}
+  m_Father: {fileID: 8146663330904753893}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8616748254279365506
 GameObject:
   m_ObjectHideFlags: 0
@@ -8862,17 +8949,30 @@ MonoBehaviour:
   - hedef: {fileID: 7049937562454841804}
     beklemeSuresi: 0
     varincaYanipSondur: 0
+    varincaUrunuAl: 0
+    varincaUrunuGeriGetir: 0
+    urunGeriGelmeGecikmesi: 2
   - hedef: {fileID: 1756678655020213472}
     beklemeSuresi: 0
     varincaYanipSondur: 0
+    varincaUrunuAl: 0
+    varincaUrunuGeriGetir: 0
+    urunGeriGelmeGecikmesi: 2
   - hedef: {fileID: 2025576402503154906}
     beklemeSuresi: 2
     varincaYanipSondur: 0
+    varincaUrunuAl: 1
+    varincaUrunuGeriGetir: 0
+    urunGeriGelmeGecikmesi: 2
   - hedef: {fileID: 5351769079228903770}
     beklemeSuresi: 0
     varincaYanipSondur: 1
+    varincaUrunuAl: 0
+    varincaUrunuGeriGetir: 1
+    urunGeriGelmeGecikmesi: 2
   faceTarget: {fileID: 1048071547140516069}
   odemeAlani: {fileID: 8086497550935952034}
+  rafUrunu: {fileID: 7239566123121650004}
   visual: {fileID: 7429042318589207664}
   progressBar: {fileID: 5109590570265596089}
   hint: {fileID: 7395374513877568609}

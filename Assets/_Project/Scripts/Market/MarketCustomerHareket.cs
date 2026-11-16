@@ -14,6 +14,12 @@ namespace Market
             public float beklemeSuresi = 0f;
             [Tooltip("Bu noktaya VARINCA ödeme alanı yanıp sönmeye başlasın")]
             public bool varincaYanipSondur = false;
+            [Tooltip("Bu noktaya VARINCA raftaki ürün alınsın (silinsin)")]
+            public bool varincaUrunuAl = false;
+            [Tooltip("Bu noktaya VARINCA ürün geri gelsin (gecikmeyle)")]
+            public bool varincaUrunuGeriGetir = false;
+            [Tooltip("Ürün kaç saniye sonra tekrar doğsun")]
+            public float urunGeriGelmeGecikmesi = 2f;
         }
 
         enum Durum { Yuruyor, Bekliyor, Kasada, Serviste, Cikiyor, Uzakta }
@@ -24,6 +30,10 @@ namespace Market
         [Header("Kasa")]
         [SerializeField] Transform faceTarget;
         [SerializeField] OdemeAlani odemeAlani;
+
+        [Header("Raf")]
+        [Tooltip("Ürünün doğduğu SpawnPad (UrunSpawner script'i olan obje)")]
+        [SerializeField] UrunSpawner rafUrunu;
 
         [Header("Görünüm")]
         [Tooltip("Karakterin Visual objesi (gidince gizlenir)")]
@@ -81,6 +91,12 @@ namespace Market
                     {
                         if (path[hedefIndex].varincaYanipSondur && odemeAlani != null)
                             odemeAlani.YanipSonmeyiBaslat();
+
+                        if (path[hedefIndex].varincaUrunuAl && rafUrunu != null)
+                            rafUrunu.UrunuAl();
+
+                        if (path[hedefIndex].varincaUrunuGeriGetir && rafUrunu != null)
+                            rafUrunu.GeriGetir(path[hedefIndex].urunGeriGelmeGecikmesi);
 
                         float bekleme = path[hedefIndex].beklemeSuresi;
                         if (bekleme > 0f)
