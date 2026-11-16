@@ -23,6 +23,8 @@ public class CarHitCameraBump : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (debugLog) Debug.Log("Trigger: " + other.name + " | tag: " + other.tag);
+        // Arabanın görünmez alanları (ör. oto yıkamadaki ön güvenlik alanı) çarpma sayılmaz, sadece gövdesi
+        if (other.isTrigger) return;
         if (IsCar(other)) Bump();
     }
 
