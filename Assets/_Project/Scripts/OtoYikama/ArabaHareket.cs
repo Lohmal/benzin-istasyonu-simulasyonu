@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class ArabaHareket : MonoBehaviour
 {
+    [Header("On Guvenlik")]
+    public ArabaOnGuvenlik onGuvenlik;
+
     [Header("Noktalar")]
     public Transform yikamaHedefi;
     public Transform cikisHedefi;
@@ -24,11 +27,25 @@ public class ArabaHareket : MonoBehaviour
     void Start()
     {
         aktifHedef = yikamaHedefi;
+
+        if (spawner == null)
+        {
+            spawner = GetComponentInParent<ArabaSpawner>();
+
+            if (spawner == null)
+            {
+                spawner = FindFirstObjectByType<ArabaSpawner>();
+            }
+        }
     }
 
     void Update()
     {
         if (!hareketEdiyor || aktifHedef == null)
+            return;
+
+        // Player arabanin onundeyse hareket etme
+        if (onGuvenlik != null && onGuvenlik.playerOnde)
             return;
 
         Vector3 hedefKonum = new Vector3(
